@@ -88,22 +88,13 @@ private:
    */
   static std::string DecodeImageURL(const std::string &url, unsigned int &width, unsigned int &height, CPictureScalingAlgorithm::Algorithm& scalingAlgorithm, std::string &additional_info);
 
-  /*! \brief Load an image at a given target size and orientation.
-
-   Doesn't necessarily load the image at the desired size - the loader *may* decide to load it slightly larger
-   or smaller than the desired size for speed reasons.
+  /*! \brief Load an image at the original size and the given orientation.
 
    \param image the URL of the image file.
-   \param width the desired maximum width.
-   \param height the desired maximum height.
    \param additional_info extra info for loading, such as whether to flip horizontally.
    \return a pointer to a CTexture object, NULL if failed.
    */
-  static std::unique_ptr<CTexture> LoadImage(const std::string& image,
-                                             unsigned int width,
-                                             unsigned int height,
-                                             const std::string& additional_info,
-                                             bool requirePixels = false);
+  static std::unique_ptr<CTexture> LoadImage(const std::string& image, const std::string& additional_info);
 
   std::string    m_cachePath;
 };

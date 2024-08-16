@@ -124,7 +124,7 @@ bool CTextureCacheJob::CacheTexture(std::unique_ptr<CTexture>* out_texture)
     }
   }
 
-  std::unique_ptr<CTexture> texture = LoadImage(image, width, height, additional_info, true);
+  std::unique_ptr<CTexture> texture = LoadImage(image, additional_info);
   if (texture)
   {
     if (texture->HasAlpha())
@@ -164,7 +164,7 @@ bool CTextureCacheJob::ResizeTexture(const std::string &url, uint8_t* &result, s
   if (image.empty())
     return false;
 
-  std::unique_ptr<CTexture> texture = LoadImage(image, width, height, additional_info, true);
+  std::unique_ptr<CTexture> texture = LoadImage(image, additional_info);
   if (texture == NULL)
     return false;
 
@@ -234,15 +234,12 @@ std::string CTextureCacheJob::DecodeImageURL(const std::string &url, unsigned in
 }
 
 std::unique_ptr<CTexture> CTextureCacheJob::LoadImage(const std::string& image,
-                                                      unsigned int width,
-                                                      unsigned int height,
-                                                      const std::string& additional_info,
-                                                      bool requirePixels)
+                                                      const std::string& additional_info)
 {
   if (!additional_info.empty())
   {
     IMAGE_FILES::CSpecialImageLoaderFactory specialImageLoader{};
-    auto texture = specialImageLoader.Load(additional_info, image, width, height);
+    auto texture = specialImageLoader.Load(additional_info, image, 0, 0);
     if (texture)
       return texture;
   }
@@ -255,7 +252,7 @@ std::unique_ptr<CTexture> CTextureCacheJob::LoadImage(const std::string& image,
     return NULL;
 
   std::unique_ptr<CTexture> texture =
-      CTexture::LoadFromFile(image, width, height, requirePixels, file.GetMimeType());
+      CTexture::LoadFromFile(image, 0, 0, CAspectRatio::AR_CENTER, file.GetMimeType());
   if (!texture)
     return NULL;
 
