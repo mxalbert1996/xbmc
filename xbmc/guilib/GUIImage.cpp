@@ -234,6 +234,11 @@ bool CGUIImage::OnMessage(CGUIMessage& message)
     message.SetLabel(GetFileName());
     return true;
   }
+  else if (message.GetMessage() == GUI_MSG_NOTIFY_ALL && message.GetParam1() == GUI_MSG_WINDOW_RESIZE)
+  {
+    m_texture->FreeResources(true);
+    return true;
+  }
   return CGUIControl::OnMessage(message);
 }
 
